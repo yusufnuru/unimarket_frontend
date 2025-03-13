@@ -1,6 +1,11 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  modules: ['@nuxtjs/tailwindcss', 'shadcn-nuxt', '@nuxtjs/color-mode'],
+  modules: [
+    '@nuxtjs/tailwindcss',
+    'shadcn-nuxt',
+    '@nuxtjs/color-mode',
+    '@nuxt/eslint'
+  ],
   css: [
     '~/assets/css/tailwind.css'
   ],
@@ -17,6 +22,9 @@ export default defineNuxtConfig({
   },
   colorMode: {
     classSuffix: ''
+  },eslint: {
+    // Optional: Customize module options
+    lintOnStart: false, // Disable linting on startup for faster dev
   },
   compatibilityDate: '2024-11-01',
   devtools: { enabled: true }

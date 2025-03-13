@@ -10,22 +10,33 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
+    "@iconify/vue": "^4.3.0",
+    "@nuxt/eslint": "^1.2.0",
     "@vueuse/core": "^13.0.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "eslint": "^9.22.0",
     "lucide-vue-next": "^0.479.0",
+    "motion": "^12.5.0",
     "nuxt": "^3.16.0",
     "reka-ui": "^2.0.2",
     "shadcn-nuxt": "^1.0.3",
     "tailwind-merge": "^3.0.2",
     "tailwindcss-animate": "^1.0.7",
     "vue": "^3.5.13",
+    "vue-feather-icons": "^5.1.0",
     "vue-router": "^4.5.0"
   },
   "devDependencies": {
-    "@iconify-json/radix-icons": "^1.2.2",
-    "@iconify/vue": "^4.3.0",
     "@nuxtjs/color-mode": "^3.5.2",
-    "@nuxtjs/tailwindcss": "^6.13.2"
+    "@nuxtjs/tailwindcss": "^6.13.2",
+    "@stylistic/eslint-plugin": "^4.2.0"
+  },
+  "pnpm": {
+    "ignoredBuiltDependencies": [
+      "@parcel/watcher",
+      "esbuild",
+      "vue-demi"
+    ]
   }
 }
