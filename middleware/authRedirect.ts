@@ -3,7 +3,7 @@ export default defineNuxtRouteMiddleware((to) => {
   const authStore = useAuthStore();
 
   // Only apply this logic to signup and signin routes
-  if (to.path === '/signup' || to.path === '/login') {
+  if (to.path === '/register' || to.path === '/login') {
     try {
       // Check authentication status first
       if (!authStore.isAuthenticated) {
