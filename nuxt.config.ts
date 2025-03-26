@@ -6,8 +6,10 @@ export default defineNuxtConfig({
     '@nuxtjs/color-mode',
     '@nuxt/eslint',
     '@formkit/auto-animate/nuxt',
+    '@pinia/nuxt',
+    'pinia-plugin-persistedstate/nuxt',
   ],
-  css: ['~/assets/css/tailwind.css'],
+  css: ['@/assets/css/tailwind.css'],
   shadcn: {
     /**
      * Prefix for all the imported component
@@ -25,6 +27,11 @@ export default defineNuxtConfig({
   eslint: {
     // Optional: Customize module options
     lintOnStart: false, // Disable linting on startup for faster dev
+  },
+  runtimeConfig: {
+    public: {
+      apiBase: process.env.API_BASE_URL || 'http://localhost:4000', // Backend URL
+    },
   },
   compatibilityDate: '2024-11-01',
   devtools: { enabled: true },
