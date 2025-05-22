@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import Toaster from '@/components/ui/toast/Toaster.vue';
+import { Toaster } from '@/components/ui/sonner';
 </script>
 
 <template>
@@ -7,6 +7,6 @@ import Toaster from '@/components/ui/toast/Toaster.vue';
     <NuxtPage />
   </NuxtLayout>
   <ClientOnly>
-    <Toaster />
+    <Toaster rich-colors close-button position="top-right" />
   </ClientOnly>
 </template>
