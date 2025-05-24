@@ -20,6 +20,7 @@ definePageMeta({
 });
 
 const auth = useAuthStore();
+const router = useRouter();
 const isLoading = ref(false);
 const showPassword = ref(false);
 const formSchema = toTypedSchema(loginSchema);
@@ -32,7 +33,7 @@ const loginMutation = useMutation({
     const auth = useAuthStore();
     return await auth.login(values);
   },
-  onSuccess: (data) => {
+  onSuccess: async (data) => {
     toast.success(data.message, {
       description: 'Welcome back!',
       duration: 2000,
@@ -40,11 +41,11 @@ const loginMutation = useMutation({
     resetForm();
 
     if (auth.role === 'admin') {
-      void navigateTo('/admin/dashboard');
+      await router.push('/admin/dashboard');
     } else if (auth.role === 'seller') {
-      void navigateTo('/seller/');
+      await router.push('/seller/dashboard/');
     } else {
-      void navigateTo('/');
+      await router.push('/');
     }
   },
   onError: (error) => {

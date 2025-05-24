@@ -18,6 +18,7 @@ definePageMeta({
   middleware: ['auth-redirect'],
 });
 
+const router = useRouter();
 const showPassword = ref(false);
 const serverResponse = ref<unknown>(null);
 const formSchema = toTypedSchema(registerSchema);
@@ -36,7 +37,8 @@ const registerMutation = useMutation({
       description: data.message || 'You are now registered',
       duration: 3000,
     });
-    await navigateTo('/login');
+    resetForm();
+    await router.push('/login');
   },
   onError: (error) => {
     let message = 'Registration failed ';
