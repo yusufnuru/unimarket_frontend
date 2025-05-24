@@ -1,7 +1,5 @@
 <script setup lang="ts">
-import { useAuthStore } from '@/stores/authStore';
-import type { Product } from '@/types/global';
-import { Carousel, CarouselContent, CarouselItem } from '@/components/ui/carousel';
+import type { Product } from '@/types/product';
 
 defineProps<{
   products: Array<
@@ -10,17 +8,20 @@ defineProps<{
     }
   >;
 }>();
+const route = useRoute();
 const auth = useAuthStore();
 const isSeller = auth.role === 'seller';
 const isAdmin = auth.role === 'admin';
+const isHome = route.path === '/';
+const isSellerPage = route.path.includes('/seller');
+const isAdminPage = route.path.includes('/admin');
 
-const getToProductPage = (productId: string) => {
-  return isSeller
-    ? `/seller/product/${productId}`
-    : isAdmin
-      ? `/admin/product/${productId}`
+const getToProductPage = (productId: string) =>
+  isAdmin && isAdminPage
+    ? `/admin/product/${productId}`
+    : isSeller && isSellerPage
+      ? `/seller/product/${productId}`
       : `/product/${productId}`;
-};
 </script>
 
 <template>
@@ -31,8 +32,8 @@ const getToProductPage = (productId: string) => {
       class="flex flex-col h-full rounded-lg shadow-md overflow-hidden hover:shadow-xl duration-300 bg-card border border-border/30"
     >
       <!-- Product Image Carousel -->
-      <div class="relative w-full aspect-[4/3] overflow-hidden">
-        <Carousel class="w-full" orientation="horizontal">
+      <div class="w-full h-40 sm:h-52 md:h-56 lg:h-60 overflow-hidden">
+        <Carousel class="w-full h-full" orientation="horizontal">
           <CarouselContent>
             <CarouselItem
               v-for="(image, _) in product.images"
@@ -42,6 +43,8 @@ const getToProductPage = (productId: string) => {
               <img
                 :src="image.imageUrl"
                 :alt="`Image of ${product.productName}`"
+                width="400"
+                height="300"
                 class="w-full h-full object-cover"
                 loading="lazy"
               />
@@ -52,7 +55,7 @@ const getToProductPage = (productId: string) => {
 
       <!-- Product Details -->
       <NuxtLink
-        :to="getToProductPage(product.id)"
+        :to="`${getToProductPage(product.id)}`"
         class="bg-card p-2 flex flex-col justify-between flex-1"
       >
         <div class="flex flex-col flex-1 justify-between">
@@ -71,7 +74,7 @@ const getToProductPage = (productId: string) => {
 
           <!-- Visibility (Conditional) -->
           <p
-            v-if="auth.isAuthenticated && (isSeller || isAdmin)"
+            v-if="!isHome"
             class="text-sm sm:text-md font-bold"
             :class="product.visibility ? 'text-green-600' : 'text-red-600'"
           >
