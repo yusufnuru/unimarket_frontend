@@ -14,7 +14,7 @@ definePageMeta({
 
 const route = useRoute();
 const router = useRouter();
-const code = route.params.code as string;
+const code = (route.params.code as string).split(/[?&]/)[0];
 const { isLoading, error, isError, isSuccess } = useQuery<AuthResponseMessage>({
   queryKey: ['verifyEmail', code],
   queryFn: async () => {
@@ -85,7 +85,7 @@ const errorMessage = computed(() => {
           <NuxtLink to="/login" class="text-primary hover:underline"> Get a new link </NuxtLink>
         </p>
 
-        <NuxtLink to="/" class="text-primary hover:underline"> Back to home </NuxtLink>
+        <NuxtLink to="/public" class="text-primary hover:underline"> Back to home </NuxtLink>
       </div>
     </div>
   </div>
