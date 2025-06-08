@@ -12,6 +12,7 @@ import { AxiosError } from 'axios';
 import { useAuthStore } from '@/stores/authStore';
 import { useMutation } from '@tanstack/vue-query';
 import { toast } from 'vue-sonner';
+import { vAutoAnimate } from '@formkit/auto-animate/vue';
 
 definePageMeta({
   layout: 'auth',
@@ -53,6 +54,7 @@ const registerMutation = useMutation({
   },
 });
 
+const isLoading = registerMutation.isPending;
 const onSubmit = handleSubmit((values: RegisterSchema) => {
   registerMutation.mutate(values);
 });
@@ -81,7 +83,7 @@ const onSubmit = handleSubmit((values: RegisterSchema) => {
                   type="text"
                   placeholder="Salam"
                   v-bind="componentField"
-                  :disabled="!registerMutation.isPending"
+                  :disabled="isLoading"
                   autocomplete="given-name"
                   aria-required="true"
                 />
@@ -103,7 +105,7 @@ const onSubmit = handleSubmit((values: RegisterSchema) => {
                   type="text"
                   placeholder="Salam"
                   v-bind="componentField"
-                  :disabled="!registerMutation.isPending"
+                  :disabled="isLoading"
                   autocomplete="family-name"
                   aria-required="true"
                 />
@@ -120,7 +122,7 @@ const onSubmit = handleSubmit((values: RegisterSchema) => {
                 type="tel"
                 placeholder="+1234567890"
                 v-bind="componentField"
-                :disabled="!registerMutation.isPending"
+                :disabled="isLoading"
                 autocomplete="tel"
                 aria-required="true"
               />
@@ -137,7 +139,7 @@ const onSubmit = handleSubmit((values: RegisterSchema) => {
                 type="email"
                 placeholder="salam@example.com"
                 v-bind="componentField"
-                :disabled="!registerMutation.isPending"
+                :disabled="isLoading"
                 autocomplete="username"
                 aria-required="true"
               />
@@ -154,7 +156,7 @@ const onSubmit = handleSubmit((values: RegisterSchema) => {
                 <Input
                   :type="showPassword ? 'text' : 'password'"
                   v-bind="componentField"
-                  :disabled="!registerMutation.isPending"
+                  :disabled="isLoading"
                   autocomplete="current-password"
                   aria-required="true"
                 />
@@ -163,7 +165,7 @@ const onSubmit = handleSubmit((values: RegisterSchema) => {
                   variant="ghost"
                   size="sm"
                   class="absolute right-2 top-1/2 -translate-y-1/2"
-                  :disabled="!registerMutation.isPending"
+                  :disabled="isLoading"
                   aria-label="Toggle password visibility"
                   @click="showPassword = !showPassword"
                 >
@@ -188,7 +190,7 @@ const onSubmit = handleSubmit((values: RegisterSchema) => {
                 <Input
                   :type="showPassword ? 'text' : 'password'"
                   v-bind="componentField"
-                  :disabled="!registerMutation.isPending"
+                  :disabled="isLoading"
                   autocomplete="current-password"
                   aria-required="true"
                 />
@@ -197,7 +199,7 @@ const onSubmit = handleSubmit((values: RegisterSchema) => {
                   variant="ghost"
                   size="sm"
                   class="absolute right-2 top-1/2 -translate-y-1/2"
-                  :disabled="!registerMutation.isPending"
+                  :disabled="isLoading"
                   aria-label="Toggle password visibility"
                   @click="showPassword = !showPassword"
                 >
@@ -217,7 +219,7 @@ const onSubmit = handleSubmit((values: RegisterSchema) => {
               <RadioGroup
                 class="flex flex-col space-y-1"
                 v-bind="componentField"
-                :disabled="!registerMutation.isPending"
+                :disabled="isLoading"
               >
                 <FormItem class="flex items-center space-y-0 gap-x-3">
                   <FormControl>
@@ -240,9 +242,9 @@ const onSubmit = handleSubmit((values: RegisterSchema) => {
         <Button
           type="submit"
           class="w-full"
-          :disabled="!registerMutation.isPending || Object.keys(errors).length > 0"
+          :disabled="isLoading || Object.keys(errors).length > 0"
         >
-          <span v-if="!registerMutation.isPending" class="flex items-center">
+          <span v-if="isLoading" class="flex items-center">
             <Loader2 class="mr-2 h-4 w-4 animate-spin" />
             Creating Account...
           </span>

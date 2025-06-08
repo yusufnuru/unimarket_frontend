@@ -19,9 +19,8 @@ definePageMeta({
   middleware: ['auth-redirect'],
 });
 
-const auth = useAuthStore();
+const authStore = useAuthStore();
 const router = useRouter();
-const isLoading = ref(false);
 const showPassword = ref(false);
 const formSchema = toTypedSchema(loginSchema);
 
@@ -30,19 +29,19 @@ const { isFieldDirty, handleSubmit, errors, resetForm } = useForm({
 });
 const loginMutation = useMutation({
   mutationFn: async (values: LoginSchema) => {
-    const auth = useAuthStore();
-    return await auth.login(values);
+    const authStore = useAuthStore();
+    return await authStore.login(values);
   },
   onSuccess: async (data) => {
     toast.success(data.message, {
       description: 'Welcome back!',
-      duration: 2000,
+      duration: 3000,
     });
     resetForm();
 
-    if (auth.role === 'admin') {
+    if (authStore.role === 'admin') {
       await router.push('/admin/dashboard');
-    } else if (auth.role === 'seller') {
+    } else if (authStore.role === 'seller') {
       await router.push('/seller/dashboard/');
     } else {
       await router.push('/');
@@ -60,7 +59,7 @@ const loginMutation = useMutation({
     });
   },
 });
-
+const isLoading = loginMutation.isPending;
 const onSubmit = handleSubmit(async (values: LoginSchema) => {
   loginMutation.mutate(values);
 });
