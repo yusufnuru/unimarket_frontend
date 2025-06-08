@@ -1,41 +1,31 @@
-import { toast } from '@/components/ui/toast';
+import { toast } from 'vue-sonner';
 export default defineNuxtRouteMiddleware((to) => {
   const authStore = useAuthStore();
-
-  // Only apply this logic to signup and signin routes
+  const router = useRouter();
   if (to.path === '/register' || to.path === '/login') {
     try {
-      // Check authentication status first
       if (!authStore.isAuthenticated) {
-        return; // Allow access to signup/login pages if not authenticated
+        return;
       }
 
       // Show toast only when redirecting
-      toast({
-        title: 'You are already logged in',
-        variant: 'default',
-        duration: 3000,
-      });
+      setTimeout(() => {
+        toast('You are already logged in. Redirecting...');
+      }, 3000);
 
       // Immediate redirect instead of setTimeout
-      if (authStore.role === 'admin') {
-        setTimeout(() => {
-          void navigateTo('/dashboard/admin');
-        }, 1000);
-      } else if (authStore.role === 'seller') {
-        setTimeout(() => {
-          void navigateTo('/dashboard/seller');
-        }, 1000);
-      } else if (authStore.role === 'buyer') {
-        setTimeout(() => {
-          void navigateTo('/');
-        }, 1000);
-      }
+      const redirectPath =
+        authStore.role === 'admin'
+          ? '/admin/dashboard'
+          : authStore.role === 'seller'
+            ? '/seller/dashboard'
+            : '/';
+      setTimeout(async () => {
+        await router.push(redirectPath);
+      }, 3000);
     } catch (error) {
       console.error('Auth middleware error:', error);
-      // Optionally redirect to an error page
-      return navigateTo('/error');
+      return router.push('/error');
     }
   }
-  // Continue to the requested route if not signup/login
 });
