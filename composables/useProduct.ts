@@ -22,7 +22,13 @@ interface ProductQuery {
   sortOrder?: 'desc' | 'asc';
 }
 
+interface ProductCategory {
+  id: string;
+  name: string;
+}
+
 interface ProductsResponse {
+  productsCategory?: ProductCategory;
   products: Product[];
   pagination: Pagination;
 }
@@ -51,10 +57,11 @@ interface UseProductsOptions {
   url: string;
   initialLimit?: number;
   debounceDelay?: number;
+  category?: string;
 }
 
 export const useProducts = (options: UseProductsOptions) => {
-  const { initialLimit = 12, debounceDelay = 300, url } = options;
+  const { initialLimit = 12, debounceDelay = 300, url, category } = options;
   const api = useApi();
 
   const searchValue = ref('');
@@ -66,7 +73,7 @@ export const useProducts = (options: UseProductsOptions) => {
     page: 1,
     limit: initialLimit,
     search: undefined,
-    categoryId: undefined,
+    categoryId: category,
     minPrice: undefined,
     maxPrice: undefined,
     sortBy: 'createdAt',
@@ -85,8 +92,8 @@ export const useProducts = (options: UseProductsOptions) => {
       );
 
     const response = await api.get(url, { params });
-    const { products, pagination } = response.data as ProductsResponse;
-    return { products, pagination };
+    const { products, pagination, productsCategory } = response.data as ProductsResponse;
+    return { products, pagination, productsCategory };
   };
 
   const {
@@ -107,6 +114,7 @@ export const useProducts = (options: UseProductsOptions) => {
   const loading = computed(() => isLoading.value);
   const products = computed(() => data?.value?.products || []);
   const itemsPerPage = computed(() => productQuery.value.limit);
+  const productsCategory = computed(() => data?.value?.productsCategory || null);
 
   const handleSortChange = (option: SortOption) => {
     sortValue.value = option;
@@ -226,6 +234,7 @@ export const useProducts = (options: UseProductsOptions) => {
     totalItems,
     currentPage,
     itemsPerPage,
+    productsCategory,
 
     // Methods
     goToPage,
