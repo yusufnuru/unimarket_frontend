@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useSellerStore } from '@/stores/sellerStore';
-import ProductPagination from '@/components/ProductPagination.vue';
+import ProductPagination from '@/components/Pagination.vue';
 import { AxiosError } from 'axios';
 import { Button } from '@/components/ui/button';
 
@@ -45,6 +45,12 @@ const errorMessage =
   error.value instanceof AxiosError
     ? (error.value.response?.data?.message as string)
     : error.value?.message || 'Fetch Error - An unexpected error occurred.';
+
+onMounted(async () => {
+  if (products.value.length === 0) {
+    await refetch();
+  }
+});
 </script>
 
 <template>

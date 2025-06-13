@@ -10,7 +10,12 @@ export default defineNuxtConfig({
     '@pinia/nuxt',
     'pinia-plugin-persistedstate/nuxt',
     'shadcn-nuxt',
+    '@vueuse/nuxt',
+    '@nuxt/image',
   ],
+  app: {
+    pageTransition: { name: 'page', mode: 'out-in' },
+  },
   css: ['@/assets/css/tailwind.css'],
   vite: {
     plugins: [
@@ -40,6 +45,7 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       apiBase: process.env.API_BASE_URL || 'http://localhost:4000/api', // Backend URL
+      nodeEnv: process.env.NODE_ENV,
     },
   },
   plugins: ['@/plugins/vue-query.ts'],

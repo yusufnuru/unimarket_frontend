@@ -67,17 +67,6 @@ export const useBuyerStore = defineStore('buyer', {
       return response.data as AddToWishlistResponse;
     },
 
-    async getWishlistItem(productId: ProductParamSchema) {
-      const api = useApi();
-      if (!this.buyerId) {
-        throw new AxiosError('Buyer ID is not set');
-      }
-      const response = await api.get(`/buyer/${this.buyerId}/wishlists/${productId}`, {
-        withCredentials: true,
-      });
-      return response.data.wishlistItem as WishList;
-    },
-
     async removeWishlistItem(productId: ProductParamSchema) {
       const api = useApi();
       if (!this.buyerId) {

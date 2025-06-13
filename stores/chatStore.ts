@@ -461,5 +461,7 @@ export const useChatStore = defineStore('chat', {
     },
   },
 
-  persist: true,
+  persist: {
+    storage: piniaPluginPersistedstate.localStorage(),
+  },
 });

@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { toast } from 'vue-sonner';
 import { AlertCircle, CheckCircle2 } from 'lucide-vue-next';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { useAuthStore } from '@/stores/authStore';
 import { AxiosError } from 'axios';
-import { useQuery } from '@tanstack/vue-query';
-import type { AuthResponseMessage } from '@/types/auth';
+import { ref, onMounted } from 'vue';
+
 definePageMeta({
   layout: 'auth',
   middleware: ['auth-redirect'],
@@ -14,31 +14,38 @@ definePageMeta({
 
 const route = useRoute();
 const router = useRouter();
-const code = (route.params.code as string).split(/[?&]/)[0];
-const { isLoading, error, isError, isSuccess } = useQuery<AuthResponseMessage>({
-  queryKey: ['verifyEmail', code],
-  queryFn: async () => {
-    const auth = useAuthStore();
-    const response = await auth.verifyEmail(code);
+const code = route.params.code as string;
+
+const isLoading = ref(true);
+const isError = ref(false);
+const isSuccess = ref(false);
+const errorMessage = ref('');
+
+onMounted(async () => {
+  try {
+    const authStore = useAuthStore();
+    const response = await authStore.verifyEmail(code);
 
     toast.success('Email verified successfully', {
       description: response.message,
       duration: 3000,
     });
+
+    isSuccess.value = true;
+
     setTimeout(async () => {
       await router.push('/');
     }, 2000);
-    return response;
-  },
-  enabled: !!code,
-  retry: false,
-});
-
-const errorMessage = computed(() => {
-  if (error.value instanceof AxiosError) {
-    return error.value.response?.data?.message as string;
+  } catch (err) {
+    let errMsg;
+    if (err instanceof AxiosError) {
+      errMsg = err.response?.data?.message;
+    }
+    errorMessage.value = errMsg || 'An error occurred while verifying your email.';
+    isError.value = true;
+  } finally {
+    isLoading.value = false;
   }
-  return 'Verification failed, An unexpected error occurred.';
 });
 </script>
 

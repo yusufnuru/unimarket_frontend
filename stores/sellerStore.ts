@@ -84,6 +84,7 @@ export const useSellerStore = defineStore('seller', {
       const api = useApi();
       const response = await api.post('/store/create', values, { withCredentials: true });
       await this.fetchStore();
+      await this.fetchStoreRequest();
       return response.data as StoreCreationResponse;
     },
 
@@ -239,5 +240,7 @@ export const useSellerStore = defineStore('seller', {
     },
   },
 
-  persist: true,
+  persist: {
+    storage: piniaPluginPersistedstate.localStorage(),
+  },
 });

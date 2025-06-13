@@ -30,12 +30,12 @@ const logout = async () => {
 </script>
 
 <template>
-  <Sidebar>
+  <Sidebar collapsible="icon">
     <SidebarContent>
       <SidebarGroup>
-        <SidebarGroupLabel class="text-xl sm:text-2xl font-semibold text-foreground">{{
-          title
-        }}</SidebarGroupLabel>
+        <SidebarGroupLabel class="text-xl sm:text-2xl font-semibold text-foreground"
+          >UniMarket</SidebarGroupLabel
+        >
         <SidebarGroupContent class="flex flex-col gap-2">
           <SidebarMenu>
             <SidebarMenuItem v-for="item in items" :key="item.title">

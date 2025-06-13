@@ -86,6 +86,8 @@ const updateProductMutation = useMutation({
   },
 });
 
+const isPending = updateProductMutation.isPending;
+
 const updateProduct = handleSubmit((values: UpdateProductSchema) => {
   const formData = new FormData();
 
@@ -118,11 +120,11 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="w-5/6 mx-auto py-6 sm:p-6">
+  <div class="w-5/6 mx-auto py-4 sm:px-4">
     <CardHeader class="mb-4">
       <CardTitle class="text-2xl"> Edit Product {{ productId }} </CardTitle>
     </CardHeader>
-    <CardContent class="sm:w-1/2 grid gap-4">
+    <CardContent class="w-10/12 sm:w-1/2 p-0">
       <form
         v-if="product"
         id="createRequestForm"
@@ -137,7 +139,7 @@ onMounted(() => {
               <Input
                 type="text"
                 v-bind="componentField"
-                :disabled="!updateProductMutation.isPending"
+                :disabled="isPending"
                 aria-required="true"
                 placeholder="Product Name"
               />
@@ -154,7 +156,7 @@ onMounted(() => {
                 <Input
                   type="text"
                   v-bind="componentField"
-                  :disabled="!updateProductMutation.isPending"
+                  :disabled="isPending"
                   aria-required="true"
                   placeholder="Product Price"
                 />
@@ -170,7 +172,7 @@ onMounted(() => {
                 <Input
                   type="number"
                   v-bind="componentField"
-                  :disabled="!updateProductMutation.isPending"
+                  :disabled="isPending"
                   aria-required="true"
                   placeholder="Available Quantity"
                 />
@@ -207,7 +209,7 @@ onMounted(() => {
             <FormControl>
               <Textarea
                 v-bind="componentField"
-                :disabled="!updateProductMutation.isPending"
+                :disabled="isPending"
                 placeholder="Product description"
                 rows="4"
               />
@@ -231,7 +233,7 @@ onMounted(() => {
                 :value="image.id"
                 name="imagesToRemove"
               >
-                <FormItem class="flex flex-row items-start gap-2 sm:space-x-3 space-6">
+                <FormItem class="flex flex-row items-start gap-1 sm:gap-2 sm:space-x-3 space-6">
                   <FormControl>
                     <Checkbox
                       :model-value="value?.includes(image.id)"
@@ -243,7 +245,7 @@ onMounted(() => {
                     :alt="`Image of ${product.productName}`"
                     width="100"
                     height="100"
-                    class="w-24 h-24 sm:w-32 sm:h-32 object-cover rounded-md bg-secondary-foreground"
+                    class="w-20 h-20 sm:w-32 sm:h-32 object-cover rounded-md bg-secondary-foreground"
                     loading="lazy"
                   />
                 </FormItem>
@@ -260,7 +262,7 @@ onMounted(() => {
                 ref="fileInput"
                 type="file"
                 multiple
-                :disabled="!updateProductMutation.isPending"
+                :disabled="isPending"
                 @change="handleFileSelect"
               />
             </FormControl>
@@ -292,9 +294,9 @@ onMounted(() => {
           type="submit"
           form="createRequestForm"
           class="w-full"
-          :disabled="!updateProductMutation.isPending || Object.keys(errors).length > 0"
+          :disabled="isPending || Object.keys(errors).length > 0"
         >
-          <span v-if="!updateProductMutation.isPending" class="flex items-center">
+          <span v-if="isPending" class="flex items-center">
             <Loader2 class="mr-2 h-4 w-4 animate-spin" />
             Updating Product...
           </span>

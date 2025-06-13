@@ -1,6 +1,12 @@
 <script setup lang="ts">
 import { AxiosError } from 'axios';
-import ProductPagination from '@/components/ProductPagination.vue';
+import ProductPagination from '@/components/Pagination.vue';
+
+const buyerStore = useBuyerStore();
+const authStore = useAuthStore();
+const isAdmin = computed(() => authStore.role === 'admin');
+const isSeller = computed(() => authStore.role === 'seller');
+const isAuthenticated = computed(() => authStore.isAuthenticated);
 
 const {
   currentPage,
@@ -31,6 +37,20 @@ const errorMessage =
   error.value instanceof AxiosError
     ? (error.value.response?.data?.message as string)
     : error.value?.message || 'Fetch Error - An unexpected error occurred.';
+
+onMounted(async () => {
+  try {
+    if (
+      isAuthenticated.value &&
+      (isAdmin.value || isSeller.value) &&
+      !buyerStore.buyerWishlists?.length
+    ) {
+      await buyerStore.fetchBuyerWishlists();
+    }
+  } catch (error) {
+    console.error('Failed to fetch wishlist:', error);
+  }
+});
 </script>
 
 <template>

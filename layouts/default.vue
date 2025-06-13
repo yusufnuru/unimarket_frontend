@@ -3,7 +3,7 @@ import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
 import { Home, Heart, Send, LayoutGrid, Settings } from 'lucide-vue-next';
 import AppSidebar from '@/components/AppSidebar.vue';
 
-const buyerSidebaritems = [
+const buyerSidebarItems = [
   {
     title: 'Home',
     url: '/',
@@ -11,7 +11,7 @@ const buyerSidebaritems = [
   },
   {
     title: 'Categories',
-    url: '/categories',
+    url: '/category',
     icon: LayoutGrid,
   },
   {
@@ -34,7 +34,9 @@ const buyerSidebaritems = [
 
 <template>
   <SidebarProvider>
-    <AppSidebar title="Unimarket" :items="buyerSidebaritems" />
+    <ClientOnly>
+      <AppSidebar title="UniMarket" :items="buyerSidebarItems" />
+    </ClientOnly>
     <SidebarTrigger />
     <slot />
   </SidebarProvider>

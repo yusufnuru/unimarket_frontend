@@ -1,7 +1,7 @@
 import axios, { AxiosError, type AxiosInstance } from 'axios';
 import { useAuthStore } from '@/stores/authStore'; // Adjust based on your store setup
 
-const ERROR_MESSAGES = {
+export const ERROR_MESSAGES = {
   TOKEN_EXPIRED: 'Token expired',
 };
 

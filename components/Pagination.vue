@@ -57,6 +57,6 @@ defineProps<{
 
   <div v-if="totalItems > 0" class="text-center text-sm text-muted-foreground mt-4">
     Showing {{ (currentPage - 1) * itemsPerPage + 1 }} -
-    {{ Math.min(currentPage * itemsPerPage, totalItems) }} of {{ totalItems }} products
+    {{ Math.min(currentPage * itemsPerPage, totalItems) }} of {{ totalItems }} items
   </div>
 </template>

@@ -3,13 +3,7 @@ import { useApi } from '@/composables/useApi';
 import { useQuery } from '@tanstack/vue-query';
 import { useDebounceFn } from '@vueuse/core';
 import type { Product } from '@/types/product';
-
-interface Pagination {
-  page: number;
-  limit: number;
-  total: number;
-  pages: number;
-}
+import type { Pagination } from '@/types/global';
 
 interface ProductQuery {
   page: number;
@@ -194,23 +188,8 @@ export const useProducts = (options: UseProductsOptions) => {
     };
   };
 
-  const goToFirstPage = () => goToPage(1);
-  const goToLastPage = () => goToPage(totalPages.value);
-  const goToNextPage = () => goToPage(currentPage.value + 1);
-  const goToPreviousPage = () => goToPage(currentPage.value - 1);
-
-  const getPageNumbers = () => {
-    const total = totalPages.value;
-    const current = currentPage.value;
-
-    if (total <= 7) return Array.from({ length: total }, (_, i) => i + 1);
-
-    if (current <= 4) return [1, 2, 3, 4, 5, '...', total];
-
-    if (current >= total - 3) return [1, '...', total - 4, total - 3, total - 2, total - 1, total];
-
-    return [1, '...', current - 1, current, current + 1, '...', total];
-  };
+  const { goToFirstPage, goToLastPage, goToNextPage, goToPreviousPage, getPageNumbers } =
+    usePagination({ totalPages, currentPage, goToPage });
 
   const updateQuery = (updates: Partial<ProductQuery>) => {
     productQuery.value = {

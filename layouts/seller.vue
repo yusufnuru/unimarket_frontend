@@ -3,20 +3,20 @@ import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
 import { Store, ShoppingBasket, Send, Settings, LayoutDashboard } from 'lucide-vue-next';
 import AppSidebar from '@/components/AppSidebar.vue';
 
-const buyerSidebaritems = [
+const sellerSidebarItems = [
   {
     title: 'Dashboard',
-    url: '/seller/dashboard',
+    url: '/seller/dashboard/',
     icon: LayoutDashboard,
   },
   {
     title: 'Store',
-    url: '/seller/store',
+    url: '/seller/store/',
     icon: Store,
   },
   {
     title: 'Products',
-    url: '/seller/products',
+    url: '/seller/product/',
     icon: ShoppingBasket,
   },
   {
@@ -26,7 +26,7 @@ const buyerSidebaritems = [
   },
   {
     title: 'Settings',
-    url: '/settings',
+    url: '/seller/setting/',
     icon: Settings,
   },
 ];
@@ -34,7 +34,9 @@ const buyerSidebaritems = [
 
 <template>
   <SidebarProvider>
-    <AppSidebar title="Seller DashBoard" :items="buyerSidebaritems" />
+    <ClientOnly>
+      <AppSidebar title="Seller DashBoard" :items="sellerSidebarItems" />
+    </ClientOnly>
     <SidebarTrigger />
     <slot />
   </SidebarProvider>
