@@ -3,7 +3,6 @@ import { useApi } from '@/composables/useApi';
 import io, { Socket } from 'socket.io-client';
 import { useAuthStore } from '@/stores/authStore';
 
-const config = useRuntimeConfig();
 export interface FetchChatHistory {
   chatRoomId: string;
   messages: ChatMessage[];
@@ -74,9 +73,10 @@ export const useChatStore = defineStore('chat', {
 
   actions: {
     initializeSocket() {
+      const config = useRuntimeConfig();
       if (this.socket) this.socket.disconnect();
       const authStore = useAuthStore();
-      this.socket = io(`${config.app.baseURL}/message`, {
+      this.socket = io(`${config.public.wsBase}/message`, {
         withCredentials: true,
         auth: {
           userId: authStore.userId,

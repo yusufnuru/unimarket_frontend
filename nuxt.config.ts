@@ -46,6 +46,7 @@ export default defineNuxtConfig({
     public: {
       apiBase: process.env.API_BASE_URL, // Backend URL
       nodeEnv: process.env.NODE_ENV,
+      wsBase: process.env.NUXT_PUBLIC_WS_BASE_URL, // WebSocket URL
     },
   },
   plugins: ['@/plugins/vue-query.ts'],
