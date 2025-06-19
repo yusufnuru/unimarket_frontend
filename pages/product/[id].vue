@@ -1,10 +1,18 @@
 <script setup lang="ts">
-import type { ProductParamSchema } from '@/types/product';
+import {
+  type ProductParamSchema,
+  type ProductReportSchema,
+  productReportSchema,
+} from '@/types/product';
 import { useBuyerStore } from '@/stores/buyerStore';
 import { useMutation } from '@tanstack/vue-query';
 import { toast } from 'vue-sonner';
 import { AxiosError } from 'axios';
 import { useProductById } from '@/composables/useProductById';
+import { useForm } from 'vee-validate';
+import { toTypedSchema } from '@vee-validate/zod';
+import { Loader2 } from 'lucide-vue-next';
+import { useRouter } from 'vue-router';
 
 const route = useRoute();
 const authStore = useAuthStore();
@@ -17,6 +25,43 @@ const { loading, product, error, refetch, errorMessage } = useProductById(
 );
 
 const isInWishlist = computed(() => buyerStore.isProductInWishlist(productId.value));
+const formSchema = toTypedSchema(productReportSchema);
+const { handleSubmit, errors, isFieldDirty, setValues } = useForm({
+  validationSchema: formSchema,
+});
+
+const resetFormWithCurrentData = () => {
+  setValues({
+    productId: productId.value,
+  });
+};
+
+const reportIssueMutation = useMutation({
+  mutationFn: async (values: ProductReportSchema) => {
+    return await buyerStore.createReport(values);
+  },
+  onSuccess: (data) => {
+    toast.success(data.message, {
+      description: 'Your issue has been reported successfully.',
+      duration: 3000,
+    });
+    resetFormWithCurrentData();
+  },
+  onError: (error) => {
+    let errorMessage = 'An error occurred while reporting the issue.';
+    if (error instanceof AxiosError) {
+      errorMessage = error.response?.data?.message || error.message;
+    }
+    toast.error('Failed to report issue', {
+      description: errorMessage,
+      duration: 3000,
+    });
+  },
+});
+
+const reportProduct = handleSubmit(async (values: ProductReportSchema) => {
+  reportIssueMutation.mutate(values);
+});
 
 const addToWishListMutation = useMutation({
   mutationFn: async (productId: ProductParamSchema) => {
@@ -149,6 +194,89 @@ onMounted(async () => {
           >
             Contact Seller
           </Button>
+
+          <Dialog>
+            <DialogTrigger as-child>
+              <Button
+                variant="default"
+                class="flex-1 bg-red-600 text-primary-foreground py-2 text-center rounded-lg hover:bg-red-500"
+                @click="resetFormWithCurrentData"
+              >
+                Report Product
+              </Button>
+            </DialogTrigger>
+            <DialogContent class="sm:max-w-[425px]">
+              <DialogHeader>
+                <DialogTitle>Report Product</DialogTitle>
+              </DialogHeader>
+              <form
+                id="dialogForm"
+                :validate-on-blur="!isFieldDirty"
+                class="space-y-4"
+                @submit="reportProduct"
+              >
+                <FormField v-slot="{ componentField }" name="productId">
+                  <FormItem>
+                    <FormLabel>Product Id</FormLabel>
+                    <FormControl>
+                      <Input type="text" v-bind="componentField" aria-required="true" readonly />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                </FormField>
+                <FormField v-slot="{ componentField }" name="reason">
+                  <FormItem>
+                    <FormLabel>Reason</FormLabel>
+                    <Select v-bind="componentField" :disabled="!reportIssueMutation.isPending">
+                      <FormControl>
+                        <SelectTrigger class="w-full">
+                          <SelectValue placeholder="Select reason" />
+                        </SelectTrigger>
+                      </FormControl>
+
+                      <SelectContent>
+                        <SelectGroup>
+                          <SelectItem value="spam">Spam</SelectItem>
+                          <SelectItem value="scam">Scam</SelectItem>
+                          <SelectItem value="offensive">Offensive</SelectItem>
+                          <SelectItem value="other">Other</SelectItem>
+                        </SelectGroup>
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                </FormField>
+                <FormField v-slot="{ componentField }" name="description">
+                  <FormItem>
+                    <FormLabel>Description</FormLabel>
+                    <FormControl>
+                      <Textarea
+                        v-bind="componentField"
+                        :disabled="!reportIssueMutation.isPending"
+                        aria-required="true"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                </FormField>
+
+                <DialogFooter>
+                  <Button
+                    type="submit"
+                    form="dialogForm"
+                    class="w-full"
+                    :disabled="!reportIssueMutation.isPending || Object.keys(errors).length > 0"
+                  >
+                    <span v-if="!reportIssueMutation.isPending" class="flex items-center">
+                      <Loader2 class="mr-2 h-4 w-4 animate-spin" />
+                      Sending Report...
+                    </span>
+                    <span v-else>Report</span>
+                  </Button>
+                </DialogFooter>
+              </form>
+            </DialogContent>
+          </Dialog>
 
           <Button
             class="p-3 border border-input rounded-lg transition-colors duration-200"

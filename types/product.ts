@@ -96,6 +96,21 @@ export const createProductSchema = z.object({
   newImages: imageSchema.optional(),
 });
 
+export const productReportSchema = z.object({
+  productId: productParamSchema,
+  reason: z
+    .enum(['spam', 'scam', 'offensive', 'other'], {
+      errorMap: () => ({ message: 'Invalid report reason' }),
+    })
+    .transform((val) => val.trim()),
+  description: z
+    .string()
+    .min(50, 'Description must be at least 50 characters')
+    .max(500, 'Description must be less than 500 characters')
+    .transform((val) => val.trim()),
+});
+
 export type UpdateProductSchema = z.infer<typeof updateProductSchema>;
 export type ProductParamSchema = z.infer<typeof productParamSchema>;
 export type CreateProductSchema = z.infer<typeof createProductSchema>;
+export type ProductReportSchema = z.infer<typeof productReportSchema>;

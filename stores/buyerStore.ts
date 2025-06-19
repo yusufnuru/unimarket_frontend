@@ -1,10 +1,22 @@
 import { defineStore } from 'pinia';
-import type { Product, ProductParamSchema } from '@/types/product';
+import type { Product, ProductParamSchema, ProductReportSchema } from '@/types/product';
 import { AxiosError } from 'axios';
 
 interface AddToWishlistResponse {
   message: string;
   wishlist: WishList;
+}
+
+interface CreateReportResponse {
+  message: string;
+  report: {
+    id: string;
+    productId: string;
+    buyerId: string;
+    reason: string;
+    description: string;
+    createdAt: string;
+  };
 }
 
 interface WishList {
@@ -77,6 +89,17 @@ export const useBuyerStore = defineStore('buyer', {
       });
       await this.fetchBuyerWishlists();
       return response.data as { message: string };
+    },
+
+    async createReport(productReport: ProductReportSchema): Promise<CreateReportResponse> {
+      const api = useApi();
+      if (!this.buyerId) {
+        throw new AxiosError('Buyer ID is not set');
+      }
+      const response = await api.post(`/buyer/${this.buyerId}/reports`, productReport, {
+        withCredentials: true,
+      });
+      return response.data as CreateReportResponse;
     },
   },
   persist: {
