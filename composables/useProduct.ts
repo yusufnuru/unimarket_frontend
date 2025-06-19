@@ -57,6 +57,7 @@ interface UseProductsOptions {
 export const useProducts = (options: UseProductsOptions) => {
   const { initialLimit = 12, debounceDelay = 300, url, category } = options;
   const api = useApi();
+  const router = useRouter();
 
   const searchValue = ref('');
   const sortValue = ref('latest');
@@ -154,6 +155,23 @@ export const useProducts = (options: UseProductsOptions) => {
     }, debounceDelay),
   );
 
+  watch(
+    productQuery,
+    async (newQuery) => {
+      const query = Object.entries(newQuery)
+        .filter(([_, value]) => value !== undefined && value !== '' && value !== null)
+        .reduce(
+          (acc, [key, value]) => {
+            acc[key] = String(value); // Convert everything to string for URL
+            return acc;
+          },
+          {} as Record<string, string>,
+        );
+
+      await router.push({ query });
+    },
+    { deep: true },
+  );
   const setCategoryFilter = (categoryId: string | undefined) => {
     productQuery.value = {
       ...productQuery.value,
