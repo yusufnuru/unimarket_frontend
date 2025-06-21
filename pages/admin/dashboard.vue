@@ -2,21 +2,21 @@
 import { computed } from 'vue';
 import { useAdminStore } from '@/stores/adminStore';
 import { useStoreRequest } from '@/composables/useStoreRequest';
-import { storeRequestColumns } from '@/components/store-request/StoreRequestColumns';
+import { storeRequestColumns } from '@/components/data-table/StoreRequestColumns';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import DataTable from '@/components/data-table/DataTable.vue';
 import Pagination from '@/components/Pagination.vue';
 
 definePageMeta({
   layout: 'admin',
+  middleware: ['auth'],
+  roles: ['admin'],
 });
 
 const adminStore = useAdminStore();
-const authStore = useAuthStore();
 const adminId = computed(() => adminStore.adminId);
 
 const {
-  statusValues,
   error,
   currentPage,
   itemsPerPage,
@@ -24,8 +24,6 @@ const {
   totalPages,
   storeRequests,
   loading,
-  refetch,
-  resetFilter,
   getPageNumbers,
   goToFirstPage,
   goToLastPage,
@@ -52,7 +50,10 @@ const {
         <ScrollArea class="w-full border rounded-md">
           <DataTable :columns="storeRequestColumns" :data="storeRequests" class="w-full" />
           <ScrollBar orientation="horizontal" />
+        </ScrollArea>
+        <div class="w-full flex flex-col items-center justify-between">
           <Pagination
+            class="w-full sm:w-1/2 mb-4"
             :current-page="currentPage"
             :total-items="totalItems"
             :items-per-page="itemsPerPage"
@@ -64,14 +65,13 @@ const {
             :go-to-previous-page="goToPreviousPage"
             :go-to-page="goToPage"
           />
-        </ScrollArea>
-
-        <NuxtLink
-          to="/admin/request"
-          class="w-1/3 sm:w-1/4 bg-primary text-primary-foreground py-3 text-center rounded-lg hover:bg-primary/90 block"
-        >
-          More Info
-        </NuxtLink>
+          <NuxtLink
+            to="/admin/request"
+            class="w-1/3 sm:w-1/4 bg-primary text-primary-foreground py-3 text-center rounded-lg hover:bg-primary/90 block"
+          >
+            More Info
+          </NuxtLink>
+        </div>
       </div>
       <div v-else>
         <p>No requests available.</p>
