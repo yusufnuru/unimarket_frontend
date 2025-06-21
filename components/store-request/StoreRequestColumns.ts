@@ -2,6 +2,7 @@ import type { ColumnDef } from '@tanstack/vue-table';
 import type { StoreRequest } from '@/types/store';
 import { Button } from '@/components/ui/button';
 import { RouterLink } from 'vue-router';
+import ActionButton from '@/components/ActionButton.vue';
 
 export const storeRequestColumns: ColumnDef<StoreRequest>[] = [
   {
@@ -49,22 +50,7 @@ export const storeRequestColumns: ColumnDef<StoreRequest>[] = [
       const request = row.original;
 
       // Create NuxtLink as a button
-      return h(
-        Button,
-        {
-          size: 'sm',
-          asChild: true,
-        },
-        () =>
-          h(
-            RouterLink,
-            {
-              to: `/admin/request/${request.id}`,
-              class: 'inline-flex items-center',
-            },
-            'View Details',
-          ),
-      );
+      return h(ActionButton, { requestId: request.id });
     },
   },
 ];
