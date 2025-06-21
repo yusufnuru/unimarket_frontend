@@ -25,6 +25,9 @@ export default defineNuxtConfig({
       }),
     ],
   },
+  image: {
+    domains: [process.env.IMAGES_DOMAIN],
+  },
   shadcn: {
     /**
      * Prefix for all the imported component
