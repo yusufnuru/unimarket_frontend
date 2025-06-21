@@ -2,9 +2,10 @@
 import { computed } from 'vue';
 import { useAdminStore } from '@/stores/adminStore';
 import { useStoreRequest } from '@/composables/useStoreRequest';
-import { storeRequestColumns } from '@/components/store-request/StoreRequestColumns';
+import { storeRequestColumns } from '@/components/data-table/StoreRequestColumns';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import DataTable from '@/components/data-table/DataTable.vue';
+import Pagination from '@/components/Pagination.vue';
 
 definePageMeta({
   layout: 'admin',
@@ -13,11 +14,9 @@ definePageMeta({
 });
 
 const adminStore = useAdminStore();
-const authStore = useAuthStore();
 const adminId = computed(() => adminStore.adminId);
 
 const {
-  statusValues,
   error,
   currentPage,
   itemsPerPage,
@@ -25,9 +24,13 @@ const {
   totalPages,
   storeRequests,
   loading,
-  refetch,
-  resetFilter,
-} = await useStoreRequest({ url: `/admin/${adminId.value}/store-requests`, initialLimit: 3 });
+  goToPreviousPage,
+  goToNextPage,
+  goToPage,
+  getPageNumbers,
+  goToLastPage,
+  goToFirstPage,
+} = await useStoreRequest({ url: `/admin/${adminId.value}/store-requests`, initialLimit: 10 });
 </script>
 
 <template>
@@ -48,6 +51,21 @@ const {
           <DataTable :columns="storeRequestColumns" :data="storeRequests" class="w-full" />
           <ScrollBar orientation="horizontal" />
         </ScrollArea>
+        <div class="w-full flex flex-col items-center justify-between">
+          <Pagination
+            class="w-full sm:w-1/2 mb-4"
+            :current-page="currentPage"
+            :total-items="totalItems"
+            :items-per-page="itemsPerPage"
+            :total-pages="totalPages"
+            :get-page-numbers="getPageNumbers"
+            :go-to-first-page="goToFirstPage"
+            :go-to-last-page="goToLastPage"
+            :go-to-next-page="goToNextPage"
+            :go-to-previous-page="goToPreviousPage"
+            :go-to-page="goToPage"
+          />
+        </div>
       </div>
       <div v-else>
         <p>No requests available.</p>
