@@ -33,8 +33,13 @@ export const updateStoreSchema = z
     },
   );
 
+export const storeRequestParamSchema = z
+  .string()
+  .uuid('Invalid store request id')
+  .nonempty('Store Request id is required');
+
 export interface StoreRequest {
-  id: number;
+  id: string;
   storeId: string;
   requestMessage: string;
   requestStatus: 'pending' | 'approved' | 'rejected';
@@ -48,6 +53,7 @@ export interface StoreRequest {
   };
 }
 
+export type StoreRequestParamSchema = z.infer<typeof storeRequestParamSchema>;
 export type CreateStoreSchema = z.infer<typeof createStoreSchema>;
 export type UpdateStoreSchema = z.infer<typeof updateStoreSchema>;
 export type CreateStoreRequestSchema = z.infer<typeof createStoreRequestSchema>;
