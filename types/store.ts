@@ -53,6 +53,63 @@ export interface StoreRequest {
   };
 }
 
+export interface StoreWarnings {
+  id: string;
+  createdAt: string;
+  updatedAt: string;
+  storeId: string;
+  productId: string;
+  reason: string;
+  actionTaken: 'product_deleted' | 'product_hidden';
+  store: {
+    id: string;
+    storeName: string;
+  };
+  product: {
+    id: string;
+    storeId: string;
+    productName: string;
+  };
+}
+
+export interface StoreReports {
+  reports: {
+    id: string;
+    createdAt: string;
+    updatedAt: string;
+    description: string;
+    buyerId: string;
+    productId: string;
+    reason: 'spam' | 'scam' | 'offensive' | 'other';
+  };
+  product: {
+    id: string;
+    storeId: string;
+    productName: string;
+  };
+}
+
+export const rejectRequestSchema = z.object({
+  rejectionReason: z
+    .string()
+    .min(30)
+    .max(500, 'Rejection reason must be between 30 and 500 characters'),
+});
+
+export const createStoreWarningSchema = z.object({
+  actionTaken: z.enum(['product_deleted', 'product_hidden'], {
+    errorMap: () => ({ message: 'Invalid action taken' }),
+  }),
+
+  reason: z
+    .string()
+    .min(30, 'Reason must be at least 30 characters long')
+    .max(255, 'Reason must be at most 255 characters long')
+    .nonempty('Reason is required'),
+});
+
+export type CreateStoreWarningSchema = z.infer<typeof createStoreWarningSchema>;
+export type RejectRequestSchema = z.infer<typeof rejectRequestSchema>;
 export type StoreRequestParamSchema = z.infer<typeof storeRequestParamSchema>;
 export type CreateStoreSchema = z.infer<typeof createStoreSchema>;
 export type UpdateStoreSchema = z.infer<typeof updateStoreSchema>;
