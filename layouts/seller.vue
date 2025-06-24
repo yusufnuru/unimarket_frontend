@@ -24,11 +24,11 @@ const sellerSidebarItems = [
     url: '/seller/message/',
     icon: Send,
   },
-  {
-    title: 'Settings',
-    url: '/seller/setting/',
-    icon: Settings,
-  },
+  // {
+  //   title: 'Settings',
+  //   url: '/seller/setting/',
+  //   icon: Settings,
+  // },
 ];
 </script>
 

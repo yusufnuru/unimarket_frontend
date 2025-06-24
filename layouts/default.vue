@@ -24,11 +24,11 @@ const buyerSidebarItems = [
     url: '/wishlist',
     icon: Heart,
   },
-  {
-    title: 'Settings',
-    url: '/settings',
-    icon: Settings,
-  },
+  // {
+  //   title: 'Settings',
+  //   url: '/settings',
+  //   icon: Settings,
+  // },
 ];
 </script>
 

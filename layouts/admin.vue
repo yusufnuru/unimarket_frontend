@@ -32,21 +32,21 @@ const AdminSidebarItems = [
     url: '/admin/request/',
     icon: GitPullRequestDraft,
   },
-  {
-    title: 'Reports',
-    url: '/admin/report/',
-    icon: ClipboardMinus,
-  },
-  {
-    title: 'Warnings',
-    url: '/admin/warning/',
-    icon: MessageCircleWarning,
-  },
-  {
-    title: 'Settings',
-    url: '/admin/setting/',
-    icon: Settings,
-  },
+  // {
+  //   title: 'Reports',
+  //   url: '/admin/report/',
+  //   icon: ClipboardMinus,
+  // },
+  // {
+  //   title: 'Warnings',
+  //   url: '/admin/warning/',
+  //   icon: MessageCircleWarning,
+  // },
+  // {
+  //   title: 'Settings',
+  //   url: '/admin/setting/',
+  //   icon: Settings,
+  // },
 ];
 </script>
 
