@@ -1,8 +1,7 @@
 import type { ColumnDef } from '@tanstack/vue-table';
 import type { StoreRequest } from '@/types/store';
-import { Button } from '@/components/ui/button';
-import { RouterLink } from 'vue-router';
-import ActionButton from '@/components/ActionButton.vue';
+import { useRoute, RouterLink } from 'vue-router';
+import { useAuthStore } from '@/stores/authStore';
 
 export const storeRequestColumns: ColumnDef<StoreRequest>[] = [
   {
@@ -49,8 +48,26 @@ export const storeRequestColumns: ColumnDef<StoreRequest>[] = [
     cell: ({ row }) => {
       const request = row.original;
 
-      // Create NuxtLink as a button
-      return h(ActionButton, { requestId: request.id });
+      const route = useRoute();
+      const authStore = useAuthStore();
+
+      const getRequestPath = () => {
+        if (authStore.role === 'admin' && route.path.includes('/admin')) {
+          return `/admin/request/${request.id}`;
+        } else if (authStore.role === 'seller' && route.path.includes('/seller')) {
+          return `/seller/request/${request.id}`;
+        }
+      };
+
+      const requestPath = getRequestPath();
+      return h(
+        RouterLink,
+        {
+          to: `${requestPath}`,
+          class: 'px-2 py-1 rounded hover:bg-primary/90 hover:text-secondary',
+        },
+        { default: () => 'View Details' },
+      );
     },
   },
 ];
