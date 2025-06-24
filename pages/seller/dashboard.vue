@@ -120,7 +120,9 @@ onMounted(async () => {
           </div>
           <div v-else class="px-2">
             <p>No products available for this store.</p>
-            <Button>Add product</Button>
+            <NuxtLink to="/seller/product/new"
+              ><Button class="not-sm:w-[120px] not-sm:text-md">Add Product</Button></NuxtLink
+            >
           </div>
         </div>
       </div>
