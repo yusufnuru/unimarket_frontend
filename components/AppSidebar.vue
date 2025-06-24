@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Sidebar, SidebarContent, SidebarGroup } from '@/components/ui/sidebar';
 import { useAuthStore } from '@/stores/authStore';
-import { LogOut } from 'lucide-vue-next';
+import { LogOut, LogIn } from 'lucide-vue-next';
 
 const authStore = useAuthStore();
 
@@ -15,6 +15,11 @@ defineProps<{
 }>();
 
 const footerItems = [
+  {
+    title: 'Login',
+    url: '/login',
+    icon: LogIn,
+  },
   {
     title: 'Logout',
     url: '/logout',
@@ -53,11 +58,17 @@ const logout = async () => {
     <SidebarFooter>
       <SidebarGroupContent class="flex flex-col gap-2">
         <SidebarMenu>
-          <SidebarMenuItem v-for="item in footerItems" :key="item.title">
+          <SidebarMenuItem>
+            <SidebarMenuButton as-child>
+              <NuxtLink to="/login">
+                <component :is="footerItems[0].icon" />
+                <span class="text-lg">{{ footerItems[0].title }}</span>
+              </NuxtLink>
+            </SidebarMenuButton>
             <SidebarMenuButton as-child>
               <NuxtLink @click="logout">
-                <component :is="item.icon" />
-                <span class="text-lg">{{ item.title }}</span>
+                <component :is="footerItems[1].icon" />
+                <span class="text-lg">{{ footerItems[1].title }}</span>
               </NuxtLink>
             </SidebarMenuButton>
           </SidebarMenuItem>
