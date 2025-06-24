@@ -52,24 +52,11 @@ const {
           <ScrollBar orientation="horizontal" />
         </ScrollArea>
         <div class="w-full flex flex-col items-center justify-between">
-          <Pagination
-            class="w-full sm:w-1/2 mb-4"
-            :current-page="currentPage"
-            :total-items="totalItems"
-            :items-per-page="itemsPerPage"
-            :total-pages="totalPages"
-            :get-page-numbers="getPageNumbers"
-            :go-to-first-page="goToFirstPage"
-            :go-to-last-page="goToLastPage"
-            :go-to-next-page="goToNextPage"
-            :go-to-previous-page="goToPreviousPage"
-            :go-to-page="goToPage"
-          />
           <NuxtLink
             to="/admin/request"
             class="w-1/3 sm:w-1/4 bg-primary text-primary-foreground py-3 text-center rounded-lg hover:bg-primary/90 block"
           >
-            More Info
+            More Requests
           </NuxtLink>
         </div>
       </div>
