@@ -25,7 +25,7 @@ interface StoreRequestResponse {
   pagination: Pagination;
 }
 
-export const useStoreRequest = async (options: UseStoreRequestOptions) => {
+export const useStoreRequest = (options: UseStoreRequestOptions) => {
   const { initialLimit = 5, debounceDelay = 300, url } = options;
   const api = useApi();
   const storeRequestQuery = ref<StoreRequestQuery>({
